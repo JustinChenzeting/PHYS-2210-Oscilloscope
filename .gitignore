@@ -1,4 +1,6 @@
-data/
+data/*
+!data/half wave Schottky data/
+!data/half wave vishay data/
 .venv/
 __pycache__/
 *.py[cod]

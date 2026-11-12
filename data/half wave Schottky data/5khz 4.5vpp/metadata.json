@@ -1,0 +1,103 @@
+{
+  "host": "169.254.135.205",
+  "retrieved_at": "2026-11-12T13:51:51.909702-05:00",
+  "transport": "VXI-11",
+  "reference": "https://download.tek.com/manual/TBS2000B-Programmer-Manual-EN-US-077114904.pdf",
+  "channels": {
+    "CH1": {
+      "preamble": {
+        "byte_count": 1,
+        "bit_count": 8,
+        "encoding": "ASCII",
+        "binary_format": "RI",
+        "byte_order": "LSB",
+        "description": "Ch1, DC coupling, 500.0mV/div, 100.0us/div, 2000 points, Sample mode",
+        "point_count": 2000,
+        "point_format": "Y",
+        "x_unit": "s",
+        "x_increment": 8e-07,
+        "x_zero": -0.0008,
+        "point_offset": 0.0,
+        "y_unit": "V",
+        "y_multiplier": 0.02,
+        "y_offset": 0.0,
+        "y_zero": 0.0
+      },
+      "settings": {
+        "SCALE": "500.0000E-3",
+        "POSITION": "0.0E+0",
+        "OFFSET": "0.0E+0",
+        "COUPLING": "DC",
+        "PROBE:GAIN": "1.0000"
+      },
+      "sample_statistics": {
+        "minimum_v": -0.04,
+        "maximum_v": 1.4000000000000001,
+        "peak_to_peak_v": 1.4400000000000002,
+        "mean_v": 0.41109,
+        "rms_v": 0.6799830880249891,
+        "adc_endpoint_samples": 0
+      }
+    }
+  },
+  "restoration": {
+    "DATA:SOURCE": {
+      "expected": "CH1",
+      "actual": "CH1",
+      "ok": true
+    },
+    "DATA:ENCDG": {
+      "expected": "SRIBINARY",
+      "actual": "SRIBINARY",
+      "ok": true
+    },
+    "DATA:WIDTH": {
+      "expected": "1",
+      "actual": "1",
+      "ok": true
+    },
+    "DATA:START": {
+      "expected": "1",
+      "actual": "1",
+      "ok": true
+    },
+    "DATA:STOP": {
+      "expected": "157249",
+      "actual": "157249",
+      "ok": true
+    },
+    "MEASUREMENT:IMMED:SOURCE1": {
+      "expected": "CH1",
+      "actual": "CH1",
+      "ok": true
+    },
+    "MEASUREMENT:IMMED:TYPE": {
+      "expected": "PERIOD",
+      "actual": "PERIOD",
+      "ok": true
+    },
+    "HEADER": {
+      "expected": "0",
+      "actual": "0",
+      "ok": true
+    }
+  },
+  "voltage_note": "Volts use the instrument preamble, including its configured probe factor.",
+  "time_note": "Time is relative to the trigger. Retrieval time is not the acquisition timestamp.",
+  "identity": "TEKTRONIX,TBS2074B,C020022,CF:91.1CT FV:v1.31.16; FPGA:v2.18;",
+  "original_query_settings": {
+    "HEADER": "0",
+    "DATA:SOURCE": "CH1",
+    "DATA:ENCDG": "SRIBINARY",
+    "DATA:WIDTH": "1",
+    "DATA:START": "1",
+    "DATA:STOP": "157249",
+    "MEASUREMENT:IMMED:SOURCE1": "CH1",
+    "MEASUREMENT:IMMED:TYPE": "PERIOD"
+  },
+  "acquisition_state_before": "1",
+  "trigger_state_before": "TRIGGER",
+  "acquisition_state_after": "1",
+  "record_status": "Acquisition running or changed; different channels/measurements may be from different records.",
+  "complete": true
+}
