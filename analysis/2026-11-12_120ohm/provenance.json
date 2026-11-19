@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-12",
+  "resistance_ohm": 120.0,
+  "resistance_source": "User-supplied value; CH1 across the resistor. Applied to all selected captures.",
+  "source_root": "/Users/jj/Documents/Python/PHYS2210/oscilloscope/data",
+  "capture_count": 31,
+  "amplitude_plot_capture_count": 26,
+  "frequency_plot_capture_count": 9,
+  "voltage_definition": "Native oscilloscope CH1 peak-to-peak measurements, in volts.",
+  "current_definition": "Derived peak-to-peak resistor current = 1000 * CH1 Vpp / R, in mA.",
+  "input_definition": "Nominal source Vpp taken from the user-assigned capture folder name, not independently measured input.",
+  "repeat_handling": "Every capture retained. Later repeated setpoints shown as open diamonds. No averaging, fitting, jitter, or fabricated error bars.",
+  "iv_interpretation": "Load relation across the resistor, not a diode junction I-V measurement.",
+  "frequency_coverage_nominal_khz": {
+    "Schottky": [
+      5.0
+    ],
+    "Vishay": [
+      5.0
+    ],
+    "in4007": [
+      1.0,
+      5.0,
+      10.0,
+      15.0,
+      20.0,
+      25.0
+    ]
+  },
+  "source_summary_sha256": "9b78847233b0b1aaaed150ec9c1f0f9c8257d70bf48518a1f04141a78af04d02",
+  "analysis_generated_at": "2026-11-12T14:04:46.964431-05:00",
+  "capture_timing": "Native measurements and waveform records were retrieved sequentially while acquisition was running.",
+  "style": {
+    "font": "Helvetica",
+    "font_size_pt": 10.0,
+    "dpi": 300.0,
+    "frame": "open"
+  },
+  "style_helper_sha256": "50c6ac3f68b56bb06c99fc72cd18cbb25c1c3307a60b1dc2048bcee116e43b92",
+  "matplotlib_version": "3.11.2",
+  "numpy_version": "2.5.4",
+  "automated_figure_audits": {
+    "load_iv_120ohm": "pass",
+    "output_vs_input": "pass",
+    "voltage_vs_frequency": "pass",
+    "today_diagrams": "pass"
+  }
+}

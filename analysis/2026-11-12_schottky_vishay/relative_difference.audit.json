@@ -1,0 +1,19 @@
+{
+  "automated_status": "pass",
+  "findings": [],
+  "visual_review": "pending",
+  "quarter_size_review": "pending",
+  "scientific_review": "pending",
+  "width_mm": 150.0,
+  "height_mm": 150.0,
+  "font_size_pt": 10.0,
+  "outputs": {
+    "pdf": "relative_difference.pdf",
+    "svg": "relative_difference.svg",
+    "png": "relative_difference.png",
+    "gray.png": "relative_difference.gray.png",
+    "quarter.png": "relative_difference.quarter.png",
+    "audit.json": "relative_difference.audit.json"
+  },
+  "preview_note": "Quarter preview is 1/4 in each pixel dimension; inspect at native size."
+}

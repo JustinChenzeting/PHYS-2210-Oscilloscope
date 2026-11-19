@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-11-12T14:12:06.564109-05:00",
+  "sources": {
+    "Schottky": "/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data",
+    "Vishay": "/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data"
+  },
+  "capture_counts": {
+    "Schottky": 11,
+    "Vishay": 11
+  },
+  "x_definition": "Nominal input Vpp from the user-assigned condition folder.",
+  "y_definition": "Native CH1 peak-to-peak voltage in measurements.csv.",
+  "frequency_selection": "All included folders are labeled 5 kHz.",
+  "point_handling": "Every capture is shown; no averaging, fitting, or smoothing.",
+  "source_data_sha256": "990dffbe5419a70731871bfe97e11e421c9b244248696d5ecbe280f360b820dd",
+  "style": {
+    "font": "Helvetica",
+    "font_size_pt": 10.0,
+    "dpi": 300.0,
+    "frame": "open"
+  },
+  "automated_audit": "pass"
+}

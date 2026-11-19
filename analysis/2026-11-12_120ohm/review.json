@@ -1,0 +1,21 @@
+{
+  "resistance_ohm": 120,
+  "capture_count": 31,
+  "amplitude_plot_capture_count": 26,
+  "frequency_plot_capture_count": 9,
+  "current_conversion": "Independently verified from decimal source strings using exact rational arithmetic.",
+  "figure_geometry": "Four automated figure audits passed; square plotting boxes and fixed-size exports.",
+  "visual_checks": [
+    "Combined PDF render",
+    "Combined grayscale overview",
+    "Combined quarter-size PNG at native dimensions",
+    "Individual quarter-size PNGs at native dimensions"
+  ],
+  "visual_result": "Labels readable; no observed clipping, legend/data collisions, or panel-label collisions. Series distinguishable by marker shape in grayscale.",
+  "scientific_limits": [
+    "Currents are inferred using the supplied resistor value, not independently measured.",
+    "The load I-V relation is not a diode-junction I-V curve.",
+    "Input voltages are nominal folder settings.",
+    "Only in4007 has multiple frequency settings at nominal 3 Vpp; Schottky and Vishay each have one point."
+  ]
+}

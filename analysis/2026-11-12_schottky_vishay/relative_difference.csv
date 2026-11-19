@@ -1,0 +1,23 @@
+dataset,nominal_input_vpp_v,output_vpp_v,difference_vpp_v,relative_difference,relative_difference_pct,capture_path
+Schottky,1.0,0.216,-0.784,-0.784,-78.40,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 1vpp
+Schottky,1.5,0.384,-1.116,-0.744,-74.40,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 1.5vpp
+Schottky,2.0,0.552,-1.448,-0.724,-72.40,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 2vpp
+Schottky,2.5,0.728,-1.772,-0.7088,-70.88,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 2.5vpp
+Schottky,3.0,0.92,-2.08,-0.6933333333333333333333333333,-69.33333333333333333333333333,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 3vpp
+Schottky,3.5,1.1,-2.4,-0.6857142857142857142857142857,-68.57142857142857142857142857,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 3.5vpp
+Schottky,4.0,1.26,-2.74,-0.685,-68.5,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 4vpp
+Schottky,4.5,1.44,-3.06,-0.68,-68.0,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 4.5vpp
+Schottky,5.0,1.62,-3.38,-0.676,-67.6,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 5vpp
+Schottky,10.0,3.44,-6.56,-0.656,-65.6,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 10vpp
+Schottky,15.0,5.2,-9.8,-0.6533333333333333333333333333,-65.33333333333333333333333333,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave Schottky data/5khz 15vpp
+Vishay,1.0,0.048,-0.952,-0.952,-95.20,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 1vpp
+Vishay,1.5,0.188,-1.312,-0.8746666666666666666666666667,-87.46666666666666666666666667,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 1.5vpp
+Vishay,2.0,0.344,-1.656,-0.828,-82.80,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 2vpp
+Vishay,2.5,0.512,-1.988,-0.7952,-79.52,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 2.5vpp
+Vishay,3.0,0.68,-2.32,-0.7733333333333333333333333333,-77.33333333333333333333333333,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 3vpp
+Vishay,3.5,0.848,-2.652,-0.7577142857142857142857142857,-75.77142857142857142857142857,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 3.5vpp
+Vishay,4.0,1.04,-2.96,-0.74,-74.0,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 4vpp
+Vishay,4.5,1.2,-3.3,-0.7333333333333333333333333333,-73.33333333333333333333333333,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 4.5vpp
+Vishay,5.0,1.38,-3.62,-0.724,-72.4,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 5vpp
+Vishay,10.0,3.08,-6.92,-0.692,-69.2,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 10vpp
+Vishay,15.0,4.88,-10.12,-0.6746666666666666666666666667,-67.46666666666666666666666667,/Users/jj/Documents/Python/PHYS2210/oscilloscope/data/Voltage sweeps/half wave vishay data/5khz 15vpp

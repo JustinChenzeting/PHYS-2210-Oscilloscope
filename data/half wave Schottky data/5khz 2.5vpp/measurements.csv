@@ -1,0 +1,8 @@
+channel,measurement,value,unit,status,instrument_response
+CH1,frequency,5001.7,Hz,valid,5001.7
+CH1,period,0.0002002,s,valid,0.0002002
+CH1,peak_to_peak,0.728,V,valid,0.728
+CH1,rms,0.332054,V,valid,0.332054
+CH1,mean,0.1960256,V,valid,0.1960256
+CH1,minimum,-0.008,V,valid,-0.008
+CH1,maximum,0.72,V,valid,0.72
