@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Export Tektronix TBS2074B waveforms and measurements over USB.
+"""Export Tektronix TBS2000B waveforms and measurements over USB.
 
-Install: python -m pip install pyvisa pyvisa-py pyusb libusb-package
-Run:     .venv/bin/python capture_usb.py [--channels CH1 CH2]
+Windows: install NI-VISA and pyvisa; run py capture_usb.py --identify first.
+macOS/Linux: install pyvisa pyvisa-py pyusb libusb-package.
+Capture: python capture_usb.py [--channels CH1 CH2]
+Adapted from JustinChenzeting/PHYS-2210-Oscilloscope, commit 171490e7.
 """
 import argparse
 import csv
@@ -11,9 +13,71 @@ import json
 import math
 from pathlib import Path
 import statistics
+import sys
 
 BASE = Path(__file__).resolve().parent
 MANUAL = 'https://download.tek.com/manual/TBS2000B-Programmer-Manual-EN-US-077114904.pdf'
+
+
+MODEL_CHANNELS = {
+    'TBS2072B': 2, 'TBS2074B': 4,
+    'TBS2102B': 2, 'TBS2104B': 4,
+    'TBS2202B': 2, 'TBS2204B': 4,
+}
+
+
+def create_manager(backend):
+    """Select the vendor VISA driver on Windows, or explicit pyvisa-py."""
+    import pyvisa
+    if backend == 'py':
+        import libusb_package
+        import usb.backend.libusb1
+        if usb.backend.libusb1.get_backend(find_library=libusb_package.find_library) is None:
+            raise RuntimeError('libusb could not be loaded.')
+    try:
+        return pyvisa.ResourceManager('@' + backend)
+    except Exception as exc:
+        hint = ('Install NI-VISA with USB support, then reconnect the scope. '
+                'The VISA library and Python must have matching bitness.'
+                if backend == 'ivi' else
+                'Install pyvisa-py pyusb libusb-package and configure USB access for this OS.')
+        raise RuntimeError(f'Cannot initialize the {backend} VISA backend. {hint} Details: {exc}') from exc
+
+
+def is_tektronix_usb(resource):
+    parts = resource.upper().split('::')
+    if len(parts) < 5 or not parts[0].startswith('USB') or parts[-1] != 'INSTR':
+        return False
+    try:
+        vendor = int(parts[1], 16 if parts[1].startswith('0X') else 10)
+    except ValueError:
+        return False
+    return vendor == 0x0699
+
+
+def select_resource(manager, requested):
+    if requested:
+        if not is_tektronix_usb(requested):
+            raise ValueError('--resource must be a Tektronix USB VISA instrument resource')
+        return requested
+    resources = [r for r in manager.list_resources('USB?*::INSTR') if is_tektronix_usb(r)]
+    if len(resources) != 1:
+        raise RuntimeError(f'Expected one Tektronix USB instrument; found {resources}. '
+                           'Run --list, check the USB cable and driver, or specify --resource.')
+    return resources[0]
+
+
+def open_scope(manager, resource, timeout_ms):
+    scope = manager.open_resource(resource)
+    try:
+        scope.timeout = timeout_ms
+        scope.chunk_size = 1024 * 1024
+        scope.read_termination = '\n'
+        scope.write_termination = '\n'
+        return scope
+    except BaseException:
+        scope.close()
+        raise
 
 
 def parse_waveform(response):
@@ -44,26 +108,56 @@ def parse_waveform(response):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--resource', help='USB VISA resource (default: discover the connected Tektronix scope)')
+    parser.add_argument('--backend', choices=['ivi', 'py'],
+                        default='ivi' if sys.platform == 'win32' else 'py',
+                        help='VISA backend (default: ivi on Windows, py on macOS/Linux)')
+    diagnostics = parser.add_mutually_exclusive_group()
+    diagnostics.add_argument('--list', action='store_true', help='List USB VISA resources and exit')
+    diagnostics.add_argument('--identify', action='store_true', help='Query *IDN? only and exit')
+    parser.add_argument('--timeout-ms', type=int, default=60000, help='USB I/O timeout in ms (default: 60000)')
     parser.add_argument('--channels', nargs='+', choices=['CH1','CH2','CH3','CH4','MATH'],
                         default=['CH1'], help='Channels to fetch (default: CH1)')
     parser.add_argument('--output', type=Path,
                         help='New output directory (default: data/<timestamp> beside this script)')
     args = parser.parse_args()
+    if args.timeout_ms <= 0:
+        parser.error('--timeout-ms must be positive')
     try:
         import pyvisa
-        # Make the bundled libusb available on machines without a system libusb.
-        import libusb_package
-        import usb.backend.libusb1
-        usb.backend.libusb1.get_backend(find_library=libusb_package.find_library)
     except ImportError as exc:
-        parser.error(f'{exc}. Install pyvisa pyvisa-py pyusb libusb-package.')
+        parser.error(f'{exc}. Install pyvisa into the Python environment running this script.')
+    if args.list or args.identify:
+        manager = None
+        scope = None
+        try:
+            manager = create_manager(args.backend)
+            print(f'Backend: {args.backend}; library: {manager.visalib}')
+            if args.list:
+                resources = manager.list_resources('USB?*::INSTR')
+                for resource in resources:
+                    print(resource)
+                if not resources:
+                    print('No USB VISA instruments found. Check the cable and Windows USB/VISA driver.')
+                return
+            resource = select_resource(manager, args.resource)
+            scope = open_scope(manager, resource, args.timeout_ms)
+            print(f'Resource: {resource}')
+            print(scope.query('*IDN?').strip())
+            return
+        finally:
+            try:
+                if scope is not None:
+                    scope.close()
+            finally:
+                if manager is not None:
+                    manager.close()
     timestamp = datetime.now().astimezone()
     output = args.output or BASE/'data'/timestamp.strftime('%Y%m%d_%H%M%S_%f')
     output.mkdir(parents=True, exist_ok=False)
     scope = None
     manager = None
     metadata = {'resource':args.resource, 'retrieved_at':timestamp.isoformat(), 'transport':'USB VISA',
-                'reference':MANUAL, 'channels':{}, 'restoration':{},
+                'reference':MANUAL, 'backend':args.backend, 'channels':{}, 'restoration':{},
                 'voltage_note':'Volts use the instrument preamble, including its configured probe factor.',
                 'time_note':'Time is relative to the trigger. Retrieval time is not the acquisition timestamp.'}
     saved = {}
@@ -76,32 +170,25 @@ def main():
         # Normalize a single scalar query if the caller had response headers enabled.
         return result.rsplit(None, 1)[-1]
     try:
-        manager = pyvisa.ResourceManager('@py')
-        resource = args.resource
-        if resource is None:
-            resources = [r for r in manager.list_resources('USB?*::INSTR')
-                         if r.split('::')[1].upper() in ('1689', '0X0699', '0X699')]
-            if len(resources) != 1:
-                raise RuntimeError(f'Expected one Tektronix USB scope; found {resources}. '
-                                   'Connect the scope or specify --resource explicitly.')
-            resource = resources[0]
-        if not resource.upper().startswith('USB'):
-            raise ValueError('--resource must be a USB VISA instrument resource')
+        manager = create_manager(args.backend)
+        resource = select_resource(manager, args.resource)
         metadata['resource'] = resource
-        scope = manager.open_resource(resource)
-        scope.timeout = 15000
-        scope.read_termination = '\n'
-        scope.write_termination = '\n' 
+        metadata['visa_library'] = str(manager.visalib)
+        scope = open_scope(manager, resource, args.timeout_ms)
         metadata['identity'] = scope.query('*IDN?').strip()
-        if ',TBS2074B,' not in metadata['identity']:
-            raise ValueError('This exporter was verified for the TBS2074B; check another model before using it.')
+        print(f'Connected: {metadata["identity"]}', flush=True)
+        identity_fields = [field.strip().upper() for field in metadata['identity'].split(',')]
+        if (len(identity_fields) < 2 or identity_fields[0] != 'TEKTRONIX'
+                or identity_fields[1] not in MODEL_CHANNELS):
+            raise ValueError(f'Expected a Tektronix TBS2000B model; got {metadata["identity"]}')
+        model = identity_fields[1]
         for command in restore_commands:
             saved[command] = query(command+'?')
         metadata['original_query_settings'] = saved.copy()
         scope.write('HEADER 0')
         metadata['acquisition_state_before'] = query('ACQUIRE:STATE?')
         metadata['trigger_state_before'] = query('TRIGGER:STATE?')
-        enabled = [f'CH{i}' for i in range(1,5) if query(f'SELECT:CH{i}?') == '1']
+        enabled = [f'CH{i}' for i in range(1, MODEL_CHANNELS[model]+1) if query(f'SELECT:CH{i}?') == '1']
         if query('SELECT:MATH?') == '1':
             enabled.append('MATH')
         channels = list(dict.fromkeys(args.channels or enabled))
@@ -145,8 +232,6 @@ def main():
                 measurements.append({'channel':channel,'measurement':name,'value':value if valid else None,
                                      'unit':unit,'status':'valid' if valid else 'unavailable',
                                      'instrument_response':value})
-            print(f'{channel}: {len(codes)} points; dt={preamble["x_increment"]:g} s; '
-                  f'Vpp={max(volts)-min(volts):g} V',flush=True)
         metadata['acquisition_state_after'] = query('ACQUIRE:STATE?')
         metadata['record_status'] = ('Stopped records; acquisition was not restarted.'
             if metadata['acquisition_state_before']==metadata['acquisition_state_after']=='0'
@@ -187,8 +272,11 @@ def main():
             except Exception as exc:
                 metadata['close_error'] = str(exc)
         if manager is not None:
-            manager.close()
-        (output/'metadata.json').write_text(json.dumps(metadata,indent=2,allow_nan=False)+'\n')
+            try:
+                manager.close()
+            except Exception as exc:
+                metadata['manager_close_error'] = str(exc)
+        (output/'metadata.json').write_text(json.dumps(metadata,indent=2,allow_nan=False)+'\n', encoding='utf-8')
     if not all(item['ok'] for item in metadata['restoration'].values()):
         raise RuntimeError(f'Some settings could not be restored; see {output}/metadata.json')
     (BASE/'data').mkdir(exist_ok=True)
